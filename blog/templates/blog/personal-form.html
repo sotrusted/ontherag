@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for hidden in personalForm.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% crispy personalForm personalForm.helper %}
+            
+            {{ formset.management_form }}
+            {% for form in formset %}
+                {% for field in form.visible_fields %}
+                    {{ field.errors }}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            
+            {% crispy contactForm contactForm.helper %}
+            
+            {% if personalForm.errors or formset.errors or contactForm.errors %}
+                <div class="alert alert-danger">
+                    <ul>
+                        {% for field, errors in personalForm.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for form in formset %}
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                        {% for field, errors in contactForm.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}

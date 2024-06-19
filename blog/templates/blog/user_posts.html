@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load extras %}
+<div class="container">
+<div class="content">
+<div class="table-container">
+    <table cellspacing="0" cellpadding="0" bgcolor="#eeeeee" style="width: 100%; margin-top: 20px;">
+        <tbody>
+            <tr>
+                <td colspan="7" bgcolor="#cccccc" align="center">
+                    <font size="5" face="times roman"><b>Latest Posts</b></font>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7">
+                    <div id="latest-posts" style="padding: 10px;">
+                        <ul class="post-list">
+                            {% for post in posts %}
+                                <li>
+                                    <a class="post-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
+                                    <div class="post-meta">
+                                        <span class="author">
+                                            {% if post.author %}
+                                                {{ post.author.username }}
+                                            {% else %}
+                                                anonymous
+                                            {% endif %}
+                                        </span>
+                                        <span class="time">{{ post.date_posted }}</span>
+                                        <span class="post-actions">
+                                            {% if user.is_authenticated and user.username == post.author.username %}
+                                            <a href="{% url 'post-delete' post.pk %}">🗑️</a>
+                                            {% endif %}
+
+                                            {% get_first_nonempty_image post as first_image %}
+                                            {% if first_image %}
+                                            <div class="hover-container">
+                                                <a href="{{ post.get_absolute_url }}" class="hover-link">pic</a>
+                                                <div class="thumbnail">
+                                                    <img src="{{ first_image.url }}" alt="Thumbnail">
+                                                </div>
+                                            </div>
+                                            {% endif %} 
+
+
+                                        </span>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div></div></div>
+{% endblock %}

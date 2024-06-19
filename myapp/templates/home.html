@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %} Home Page {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="content">
+        <div class="table-container">
+            <!-- Main Table -->
+            <table cellspacing="0" cellpadding="0" bgcolor="#eeeeee" style="width:100%;">
+                <tbody>
+                    <tr>
+                        <td colspan="7" bgcolor="#cccccc" align="center">
+                            <table cellpadding="4" cellspacing="4">
+                                <tbody>
+                                    <tr>
+                                        <td align="center" width="120" bgcolor="#eeeeee">
+                                            <font size="5" face="times roman"><b><a href="#">ontherag</a></b></font>
+                                        </td>
+                                        <td bgcolor="#eeeeee" colspan="2"><b><a href="{% url 'post-create' %}">post a personal</a></b></td>
+                                        <td bgcolor="#eeeeee" colspan="2"><a href="#">articles</a></td>
+                                        <td colspan="2">
+                                            <table cellspacing="4" cellpadding="1">
+                                                <tbody>
+                                                    <tr bgcolor="#ffffff"></tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td rowspan="4" valign="top">
+                            <table cellpadding="0" cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td>&nbsp;&nbsp;</td>
+                                        <td valign="top">
+                                            <table cellpadding="1" cellspacing="1" bgcolor="#eeeeee">
+                                                <tbody>
+                                                    <tr><td class="city"><a href="#">masthead</a></td></tr>
+                                                    <tr><td class="city"><a href="#">casual encountersz</a></td></tr>
+                                                    <tr><td class="city"><a href="#">press</a></td></tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td valign="top" bgcolor="#dddddd" align="center" width="120" rowspan="1">
+                            <table cellpadding="0" cellspacing="6" width="100%">
+                                <tbody>
+                                    <tr align="center" bgcolor="#dddddd"></tr>
+                                    {% if user.username %}
+                                    <p>{{user.username}}</p>
+                                    {% else %}
+                                    <p>not logged in</p>
+                                    {% endif %}
+                                    <tr align="center">
+                                        {% if user.is_authenticated %}
+                                            <td bgcolor="#eeeeee"><a href="{% url 'user-posts' user.username %}">profile</a></td>
+                                            <td bgcolor="#eeeeee">
+                                                <form method="post" action="{% url 'logout' %}">
+                                                {% csrf_token %}
+                                                <button type="submit">logout</button>
+                                            </form>
+                                            </td>
+                                        {% else %}
+                                            <td bgcolor="#eeeeee"><a href="{% url 'register' %}">register</a></td>
+                                            <td bgcolor="#eeeeee"><a href="{% url 'login' %}">login</a></td>
+                                        {% endif %}
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <font size="1">&nbsp;</font><br>
+                            <table borders="0" width="100%" cellpadding="3" cellspacing="3"></table>
+                        </td>
+                        <td width="11" rowspan="1">&nbsp;</td>
+                        <td align="left" valign="top" style="max-width: 600px; white-space: normal; word-wrap: break-word;">
+                            <p><b><a href="#">Casual Encountersz</a></b> presents On The Rag, America’s greatest tabloid.</p>
+                            <p>Mixing artworld mischief and literary intrigue with counter culture gossip and celebrity news, On The Rag is the destination for anyone in the know. The broadsheet features fiction and poetry by lit world luminaries alongside bareknuckle reporting about LA’s wildest parties, openings and personalities.</p>
+                            <p>We got pics of Malia Obama doing coke at el Prado beside fiction by Rachel Kushner and Chris Kraus. A zoomer’s tell-all about smoking meth with Hunter Biden is below the fold and New Yorker staff writer Alexis Okeowo’s reportage from Sudan’s frontlines is above the fold. It’s the gutter-meets-the ivory tower and it’s delivered to LA and NYC’s most cringe wine bars once a month.</p>
+                            <p>Our backpage personal ads are the place REAL people from across the globe meet their next squeeze, paramour, hookup and hubbie.</p>
+                            <p>Get off the apps…and get On The Rag!</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <!-- New Simple Table Below -->
+            <table cellspacing="0" cellpadding="0" bgcolor="#eeeeee" style="width: 100%; margin-top: 20px;">
+                <tbody>
+                    <tr>
+                        <td colspan="7" bgcolor="#cccccc" align="center">
+                            <font size="5" face="times roman"><b>Latest Posts</b></font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7">
+                            <div id="latest-posts" style="padding: 10px;">
+                                {% include 'blog/post_list.html' with posts=posts %}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

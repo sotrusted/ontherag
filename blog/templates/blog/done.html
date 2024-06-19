@@ -1,0 +1,9 @@
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="form-container">
+        <h1>Thank you for your submission!</h1>
+        <p>Your <a href="{% 'post-detail' pk %}">post</a> has been successfully created.</p>
+    </div>
+{% endblock %}

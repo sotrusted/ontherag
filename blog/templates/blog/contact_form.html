@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ wizard.management_form }}
+            {% crispy wizard.form wizard.form.helper %}
+        </form>
+    </div>
+{% endblock %}
+
