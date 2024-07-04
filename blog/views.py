@@ -1,4 +1,5 @@
 from typing import Any
+from django.forms.models import model_to_dict
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
@@ -73,7 +74,12 @@ class PersonalDetailView(DetailView):
 
         post = data['post'] 
         print(post)
+        print(model_to_dict(post))
         data['pics'] = post.get_images()
+        print(data['pics'])
+        # Get previous and next posts
+        data['prev_post'] = Personal.objects.filter(id__lt=post.id).order_by('-id').first()
+        data['next_post'] = Personal.objects.filter(id__gt=post.id).order_by('id').first()
         return data
          
     

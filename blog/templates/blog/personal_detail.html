@@ -52,8 +52,17 @@
                 {% endif %}
             </div>
             <div class="mt-3 d-flex justify-content-between">
-                <a href="#" class="btn btn-link">Prev</a>
-                <a href="#" class="btn btn-link">Next</a>
+		{% if prev_post %}
+                <a href="{% url 'post-detail' prev_post.id %}" class="btn btn-link">Prev</a>
+                {% else %}
+                <span class="btn btn-link disabled">Prev</span>
+                {% endif %}
+
+                {% if next_post %}
+                <a href="{% url 'post-detail' next_post.id %}" class="btn btn-link">Next</a>
+                {% else %}
+                <span class="btn btn-link disabled">Next</span>
+                {% endif %}
             </div>
         </div>
     </div>
