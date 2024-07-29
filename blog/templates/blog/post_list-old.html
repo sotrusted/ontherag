@@ -1,0 +1,33 @@
+{% load extras %}
+<div class="content-section">
+    <ul class="post-list">
+        {% for post in posts %}
+            <li>
+                <a class="post-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
+                <div class="post-meta">
+                    <span class="author">
+                        {% if post.author %}
+                            <a href="{% url 'user-posts' post.author.username %}">{{ post.author.username }}</a>
+                        {% else %}
+                            anonymous
+                        {% endif %}
+                    </span>
+                    <span class="time">{{ post.date_posted }}</span>
+                    <span class="post-actions">
+                        {% if user.is_authenticated and user.username == post.author.username %}
+                        <a href="{% url 'post-delete' post.pk %}">🗑️</a>
+                        {% endif %}
+                        {% get_first_nonempty_image post as first_image %}
+                        {% if first_image %}
+                        <div class="hover-container">
+                            <a href="{{ post.get_absolute_url }}" class="hover-link">pic</a>
+                            <div class="thumbnail">
+                                <img src="{{ first_image.url }}" alt="Thumbnail">
+                            </div>
+                        </div>
+                        {% endif %} 
+                    </span>                
+            </li>
+        {% endfor %}
+    </ul>
+</div>

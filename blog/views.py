@@ -40,7 +40,7 @@ posts = [
 
 def home(request):
     context = {
-        'posts': Personal.objects.all()
+        'posts': Personal.objects.all().order_by('-id')
     }
     return render(request, 'blog/blog-home.html', context)
 
@@ -49,7 +49,7 @@ class PersonalListView(ListView):
     model = Personal
     template_name = 'blog/blog-home.html' # <app>/<model>_<viewtype>.html template name 
     context_object_name = 'posts'
-    ordering = ['-date_posted']
+    ordering = ['date_posted']
     paginate_by = 5
 
 class UserPersonalListView(ListView):

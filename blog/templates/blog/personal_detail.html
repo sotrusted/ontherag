@@ -2,69 +2,152 @@
 
 {% load humanize %}
 {% block content %}
-<div class="container mt-3" style="background-color: #fff">
-    <div class="row">
-        <div class="col-12">
-            <h2>{{ post.title }}</h2>
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <small class="text-muted">Posted {{ post.date_posted|naturaltime }}</small>
-                <div>
-                    <button class="btn btn-outline-secondary btn-sm">Share</button>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-12">
-                    <p>{{ post.description }}</p>
-                </div>
-                {% if pics %}
-                    {% for image in pics %}
-                        <div class="col-md-4">
-                            <img src="{{ image.url }}" class="img-fluid mb-3" alt="{{ post.title }}">
+<div class="table-container">
+    <!-- Main Table -->
+    <table cellspacing="0" cellpadding="0" bgcolor="#eeeeee" style="width:100%;">
+        <tbody>
+            <tr>
+                <td colspan="7" bgcolor="#cccccc" align="center">
+                    <table cellpadding="4" cellspacing="4">
+                        <tbody>
+                            <tr>
+                                <td align="center" width="120" bgcolor="#eeeeee">
+					<font size="5" face="times roman"><b><a href="{% url "home" %}">ontherag</a></b></font>
+                                </td>
+                                <td bgcolor="#eeeeee" colspan="2"><b><a href="{% url 'post-create' %}">post a personal</a></b></td>
+                                <td bgcolor="#eeeeee" colspan="2"><a href="#">articles</a></td>
+                                <td colspan="2">
+                                    <table cellspacing="4" cellpadding="1">
+                                        <tbody>
+                                            <tr bgcolor="#ffffff"></tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td rowspan="4" valign="top">
+                    <table cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td>&nbsp;&nbsp;</td>
+                                <td valign="top">
+                                    <table cellpadding="1" cellspacing="1" bgcolor="#eeeeee">
+                                        <tbody>
+                                            <tr><td class="city"><a href="#">masthead</a></td></tr>
+                                            <tr><td class="city"><a href="#">casual encountersz</a></td></tr>
+                                            <tr><td class="city"><a href="#">press</a></td></tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8">&nbsp;</td>
+            </tr>
+            <tr>
+                <td valign="top" bgcolor="#dddddd" align="center" width="120" rowspan="1">
+                    <table cellpadding="0" cellspacing="6" width="100%">
+                        <tbody>
+                            <tr align="center" bgcolor="#dddddd"></tr>
+                            {% if user.username %}
+                            <p>{{user.username}}</p>
+                            {% else %}
+                            <p>not logged in</p>
+                            {% endif %}
+                            <tr align="center">
+                                {% if user.is_authenticated %}
+                                    <td bgcolor="#eeeeee"><a href="{% url 'user-posts' user.username %}">profile</a></td>
+                                    <td bgcolor="#eeeeee">
+                                        <form method="post" action="{% url 'logout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit">logout</button>
+                                    </form>
+                                    </td>
+                                {% else %}
+                                    <td bgcolor="#eeeeee"><a href="{% url 'register' %}">register</a></td>
+                                    <td bgcolor="#eeeeee"><a href="{% url 'login' %}">login</a></td>
+                                {% endif %}
+                            </tr>
+                        </tbody>
+                    </table>
+                    <font size="1">&nbsp;</font><br>
+                    <table borders="0" width="100%" cellpadding="3" cellspacing="3"></table>
+                </td>
+                <td width="11" rowspan="1">&nbsp;</td>
+                <td align="left" valign="top" style="max-width: 600px; white-space: normal; word-wrap: break-word;">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>{{ post.title }}</h2>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted">Posted {{ post.date_posted|naturaltime }}</small>
+                                <div>
+                                    <button class="btn btn-outline-secondary btn-sm">Share</button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>{{ post.description }}</p>
+                                </div>
+                                {% if pics %}
+                                    {% for image in pics %}
+                                        <div class="col-md-4">
+                                            <img src="{{ image.url }}" class="img-fluid mb-3" alt="{{ post.title }}">
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="mt-3">
+                                <div>
+                                    <small>post id: {{ post.id }}</small>
+                                </div>
+                                {% if post.author %}
+                                <div class="mt-2">
+                                    <small>reply to: {{ post.author }}</small>
+                                </div>
+                                {% endif %}
+                                {% if post.phone or post.email or post.social_link %}
+                                <div class="mt-2">
+                                    <h5>Contact Info</h5>
+                                    <ul>
+                                        {% if post.phone %}
+                                        <li>Phone: {{ post.phone }}</li>
+                                        {% endif %}
+                                        {% if post.email %}
+                                        <li>Email: {{ post.email }}</li>
+                                        {% endif %}
+                                        {% if post.social_link %}
+                                        <li>Social: <a href="{{ post.social_link }}">{{ post.social_link }}</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                                {% endif %}
                         </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-            <div class="mt-3">
-                <div>
-                    <small>post id: {{ post.id }}</small>
-                </div>
-                {% if post.author %}
-                <div class="mt-2">
-                    <small>reply to: {{ post.author }}</small>
-                </div>
-                {% endif %}
-                {% if post.phone or post.email or post.social_link %}
-                <div class="mt-2">
-                    <h5>Contact Info</h5>
-                    <ul>
-                        {% if post.phone %}
-                        <li>Phone: {{ post.phone }}</li>
-                        {% endif %}
-                        {% if post.email %}
-                        <li>Email: {{ post.email }}</li>
-                        {% endif %}
-                        {% if post.social_link %}
-                        <li>Social: <a href="{{ post.social_link }}">{{ post.social_link }}</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-                {% endif %}
-            </div>
-            <div class="mt-3 d-flex justify-content-between">
-		{% if prev_post %}
-                <a href="{% url 'post-detail' prev_post.id %}" class="btn btn-link">Prev</a>
-                {% else %}
-                <span class="btn btn-link disabled">Prev</span>
-                {% endif %}
+                        <div class="mt-3 d-flex justify-content-between">
+                    {% if prev_post %}
+                            <a href="{% url 'post-detail' prev_post.id %}" class="btn btn-link">Prev</a>
+                            {% else %}
+                            <span class="btn btn-link disabled">Prev</span>
+                            {% endif %}
 
-                {% if next_post %}
-                <a href="{% url 'post-detail' next_post.id %}" class="btn btn-link">Next</a>
-                {% else %}
-                <span class="btn btn-link disabled">Next</span>
-                {% endif %}
+                            {% if next_post %}
+                            <a href="{% url 'post-detail' next_post.id %}" class="btn btn-link">Next</a>
+                            {% else %}
+                            <span class="btn btn-link disabled">Next</span>
+                            {% endif %}
             </div>
         </div>
     </div>
+
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>
-{% endblock %}
+{%endblock%}

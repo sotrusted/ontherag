@@ -11,4 +11,4 @@ def home(request):
     image_files = os.listdir(media_path)
     image_urls = [os.path.join(settings.MEDIA_URL, 'images', image) for image in image_files]
     blog_embed = render_to_string('blog/blog-home.html')
-    return render(request, 'home.html', {'image_urls': image_urls, 'blog_embed' : blog_embed, 'posts': Personal.objects.all()})
+    return render(request, 'home.html', {'image_urls': image_urls, 'blog_embed' : blog_embed, 'posts': Personal.objects.all().order_by('-id')})

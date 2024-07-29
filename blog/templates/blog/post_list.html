@@ -1,33 +1,68 @@
 {% load extras %}
 <div class="content-section">
-    <ul class="post-list">
-        {% for post in posts %}
-            <li>
-                <a class="post-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
-                <div class="post-meta">
-                    <span class="author">
-                        {% if post.author %}
-                            <a href="{% url 'user-posts' post.author.username %}">{{ post.author.username }}</a>
-                        {% else %}
-                            anonymous
-                        {% endif %}
-                    </span>
-                    <span class="time">{{ post.date_posted }}</span>
-                    <span class="post-actions">
-                        {% if user.is_authenticated and user.username == post.author.username %}
-                        <a href="{% url 'post-delete' post.pk %}">🗑️</a>
-                        {% endif %}
-                        {% get_first_nonempty_image post as first_image %}
-                        {% if first_image %}
-                        <div class="hover-container">
-                            <a href="{{ post.get_absolute_url }}" class="hover-link">pic</a>
-                            <div class="thumbnail">
-                                <img src="{{ first_image.url }}" alt="Thumbnail">
-                            </div>
-                        </div>
-                        {% endif %} 
-                    </span>                
-            </li>
-        {% endfor %}
-    </ul>
+    {% for post in posts %}
+        <div class="post-container">
+            <h3 class="post-title">
+                <a href="{% url 'post-detail' post.id %}">{{ post.title }}</a>
+            </h3>
+            <div class="post-content">
+                <p class="preview-content">{{ post.description|truncatewords:20 }}</p>
+            </div>
+            <div class="post-images">
+                {% if post.image1 %}
+                    <img src="{{ post.image1.url }}" alt="Image 1" class="img-thumbnail">
+                {% endif %}
+                {% if post.image2 %}
+                    <img src="{{ post.image2.url }}" alt="Image 2" class="img-thumbnail">
+                {% endif %}
+                {% if post.image3 %}
+                    <img src="{{ post.image3.url }}" alt="Image 3" class="img-thumbnail">
+                {% endif %}
+            </div>
+            <div class="post-meta">
+                <table class="table table-bordered">
+                    <tr>
+                        <td class="author-label">Author</td>
+                        <td class="author">
+                            {% if post.author %}
+                                <a href="{% url 'user-posts' post.author.username %}">{{ post.author.username }}</a>
+                            {% else %}
+                                anonymous
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-label">Posted</td>
+                        <td class="time">{{ post.date_posted }}</td>
+                    </tr>
+                    {% if post.phone or post.email or post.social_link %}
+                    <tr>
+                        <td colspan="2">
+                            <h5>Contact Info</h5>
+                            <ul>
+                                {% if post.phone %}
+                                <li>Phone: {{ post.phone }}</li>
+                                {% endif %}
+                                {% if post.email %}
+                                <li>Email: {{ post.email }}</li>
+                                {% endif %}
+                                {% if post.social_link %}
+                                <li>Social: <a href="{{ post.social_link }}">{{ post.social_link }}</a></li>
+                                {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if user.is_authenticated and user.username == post.author.username %}
+                    <tr>
+                        <td colspan="2" class="text-right">
+                            <a href="{% url 'post-delete' post.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    {% endfor %}
 </div>
+
